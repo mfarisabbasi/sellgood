@@ -5,6 +5,9 @@ import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import { isValidPhoneNumber } from "../functions/basicFunctions.js";
 
+// Functions Import
+import { generateToken } from "../functions/tokenFunctions.js";
+
 // @desc Send OTP
 // @route POST /api/users/send_otp
 // @access Public
@@ -55,4 +58,45 @@ const verifyOTP = asyncHandler(async (req, res) => {
   }
 });
 
-export { sendOTP, verifyOTP };
+// @desc Create New User Account
+// @route POST /api/users/create
+// @access Public
+const createNewAccount = asyncHandler(async (req, res) => {
+  try {
+    const { phoneNumber, name, profilePicture } = req.body;
+
+    if (!phoneNumber || !name)
+      return res.status(400).json({ error: "All fields are required" });
+
+    const userAlreadyExist = await User.findOne({ phoneNumber });
+
+    if (userAlreadyExist)
+      return res.status(400).json({ error: "User already exist" });
+
+    const newUser = await User.create({
+      phoneNumber,
+      name,
+      profilePicture,
+      accountCompleted: true,
+    });
+
+    if (newUser) {
+      res.status(201).json({
+        _id: newUser._id,
+        name: newUser.name,
+        phoneNumber: newUser.phoneNumber,
+        profilePicture: newUser.profilePicture,
+        accountCompleted: newUser.accountCompleted,
+        token: generateToken(newUser._id),
+      });
+    } else {
+      res
+        .status(400)
+        .json({ error: "Something went wrong while create new user account" });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+export { sendOTP, verifyOTP, createNewAccount };

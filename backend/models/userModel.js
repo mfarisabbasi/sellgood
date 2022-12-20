@@ -5,7 +5,7 @@ const userSchema = mongoose.Schema(
     phoneNumber: {
       type: String,
       required: true,
-      match: /^\+\d{1,3} \d{3} \d{3} \d{4}$/,
+      match: /^\+92(3[0-9]{2})[-. ]?([0-9]{7})$/,
     },
     name: {
       type: String,
