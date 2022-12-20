@@ -82,11 +82,6 @@ const createNewAccount = asyncHandler(async (req, res) => {
     });
 
     if (newUser) {
-      await sendEmail(
-        "mfarisabbasi@gmail.com",
-        "Testing Email System",
-        "Hello, This is a test email"
-      );
       return res.status(201).json({
         _id: newUser._id,
         name: newUser.name,
