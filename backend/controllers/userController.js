@@ -7,7 +7,6 @@ import { isValidPhoneNumber } from "../functions/basicFunctions.js";
 
 // Functions Import
 import { generateToken } from "../functions/tokenFunctions.js";
-import { sendEmail } from "../functions/emailFunctions.js";
 
 // @desc Send OTP
 // @route POST /api/users/send_otp
@@ -64,19 +63,29 @@ const verifyOTP = asyncHandler(async (req, res) => {
 // @access Public
 const createNewAccount = asyncHandler(async (req, res) => {
   try {
-    const { phoneNumber, name, profilePicture } = req.body;
+    const { phoneNumber, name, email, profilePicture } = req.body;
 
-    if (!phoneNumber || !name)
+    if (!phoneNumber || !name || !email)
       return res.status(400).json({ error: "All fields are required" });
 
-    const userAlreadyExist = await User.findOne({ phoneNumber });
+    const userAlreadyExistWithPhoneNumber = await User.findOne({ phoneNumber });
 
-    if (userAlreadyExist)
-      return res.status(400).json({ error: "User already exist" });
+    if (userAlreadyExistWithPhoneNumber)
+      return res
+        .status(400)
+        .json({ error: "Account already exist with your phone number." });
+
+    const userAlreadyExistWithEmail = await User.findOne({ email });
+
+    if (userAlreadyExistWithEmail)
+      return res
+        .status(400)
+        .json({ error: "Account already exist with your email." });
 
     const newUser = await User.create({
       phoneNumber,
       name,
+      email,
       profilePicture,
       accountCompleted: true,
     });
@@ -85,6 +94,7 @@ const createNewAccount = asyncHandler(async (req, res) => {
       return res.status(201).json({
         _id: newUser._id,
         name: newUser.name,
+        email: newUser.email,
         phoneNumber: newUser.phoneNumber,
         profilePicture: newUser.profilePicture,
         accountCompleted: newUser.accountCompleted,
