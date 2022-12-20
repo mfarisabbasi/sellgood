@@ -7,6 +7,7 @@ import { isValidPhoneNumber } from "../functions/basicFunctions.js";
 
 // Functions Import
 import { generateToken } from "../functions/tokenFunctions.js";
+import { sendEmail } from "../functions/emailFunctions.js";
 
 // @desc Send OTP
 // @route POST /api/users/send_otp
@@ -81,7 +82,12 @@ const createNewAccount = asyncHandler(async (req, res) => {
     });
 
     if (newUser) {
-      res.status(201).json({
+      await sendEmail(
+        "mfarisabbasi@gmail.com",
+        "Testing Email System",
+        "Hello, This is a test email"
+      );
+      return res.status(201).json({
         _id: newUser._id,
         name: newUser.name,
         phoneNumber: newUser.phoneNumber,
@@ -90,7 +96,7 @@ const createNewAccount = asyncHandler(async (req, res) => {
         token: generateToken(newUser._id),
       });
     } else {
-      res
+      return res
         .status(400)
         .json({ error: "Something went wrong while create new user account" });
     }
