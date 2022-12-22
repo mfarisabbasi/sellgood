@@ -44,9 +44,11 @@ const verifyOTP = asyncHandler(async (req, res) => {
       const userAlreadyExist = await User.findOne({ phoneNumber });
 
       if (userAlreadyExist && userAlreadyExist.accountCompleted === true) {
-        return res
-          .status(200)
-          .json({ account_exist: true, user_details: userAlreadyExist._doc });
+        return res.status(200).json({
+          account_exist: true,
+          user_details: userAlreadyExist._doc,
+          access_token: generateToken(userAlreadyExist._id),
+        });
       } else {
         return res.status(200).json({ account_exist: false });
       }
@@ -98,7 +100,7 @@ const createNewAccount = asyncHandler(async (req, res) => {
         phoneNumber: newUser.phoneNumber,
         profilePicture: newUser.profilePicture,
         accountCompleted: newUser.accountCompleted,
-        token: generateToken(newUser._id),
+        access_token: generateToken(newUser._id),
       });
     } else {
       return res
