@@ -39,6 +39,10 @@ const propertySchema = new mongoose.Schema({
       required: true,
     },
   ],
+  isFeatured: {
+    type: Boolean,
+    default: false,
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
