@@ -2,7 +2,6 @@
 import asyncHandler from "express-async-handler";
 
 // Models Import
-import User from "../models/userModel.js";
 import Property from "../models/propertyModel.js";
 
 // @desc Create New Property
