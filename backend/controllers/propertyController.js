@@ -62,13 +62,39 @@ const createNewProperty = asyncHandler(async (req, res) => {
 const searchProperties = asyncHandler(async (req, res) => {
   try {
     const query = {};
+    if (req.query.priceMin) {
+      query.price = { $gte: req.query.priceMin };
+    }
+    if (req.query.priceMax) {
+      query.price = { $lte: req.query.priceMax };
+    }
     if (req.query.priceMin && req.query.priceMax) {
       query.price = { $gte: req.query.priceMin, $lte: req.query.priceMax };
+    }
+    if (req.query.bedroomsMin) {
+      query.bedrooms = {
+        $gte: req.query.bedroomsMin,
+      };
+    }
+    if (req.query.bedroomsMax) {
+      query.bedrooms = {
+        $lte: req.query.bedroomsMax,
+      };
     }
     if (req.query.bedroomsMin && req.query.bedroomsMax) {
       query.bedrooms = {
         $gte: req.query.bedroomsMin,
         $lte: req.query.bedroomsMax,
+      };
+    }
+    if (req.query.bathroomsMin) {
+      query.bathrooms = {
+        $gte: req.query.bathroomsMin,
+      };
+    }
+    if (req.query.bathroomsMax) {
+      query.bathrooms = {
+        $lte: req.query.bathroomsMax,
       };
     }
     if (req.query.bathroomsMin && req.query.bathroomsMax) {
@@ -79,6 +105,12 @@ const searchProperties = asyncHandler(async (req, res) => {
     }
     if (req.query.propertyType) query.propertyType = req.query.propertyType;
     if (req.query.location) query.location = req.query.location;
+    if (req.query.areaMin) {
+      query.area = { $gte: req.query.areaMin };
+    }
+    if (req.query.areaMax) {
+      query.area = { $lte: req.query.areaMax };
+    }
     if (req.query.areaMin && req.query.areaMax) {
       query.area = { $gte: req.query.areaMin, $lte: req.query.areaMax };
     }
