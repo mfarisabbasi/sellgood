@@ -36,7 +36,6 @@ const vehicleSchema = new mongoose.Schema({
   },
   airbags: {
     type: Number,
-    required: true,
   },
   transmission: {
     type: String,
