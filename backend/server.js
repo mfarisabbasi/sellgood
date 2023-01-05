@@ -17,6 +17,7 @@ import morgan from "morgan";
 import userRoutes from "./routes/userRoutes.js";
 import propertyRoutes from "./routes/propertyRoutes.js";
 import vehicleRoutes from "./routes/vehicleRoutes.js";
+import featuredRoutes from "./routes/featuredRoutes.js";
 // Routes Import END
 
 // Basic Inits Start
@@ -47,6 +48,7 @@ app.get("/api/dev", (req, res) => {
 app.use("/api/users", userRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/vehicles", vehicleRoutes);
+app.use("/api/featured", featuredRoutes);
 // API End
 
 // Server Start
